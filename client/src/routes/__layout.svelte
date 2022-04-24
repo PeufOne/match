@@ -17,7 +17,6 @@
 </script>
 
 <script lang="ts">
-	// import 'normalize.css'
 	import '../app.css'
 
 	import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar'
