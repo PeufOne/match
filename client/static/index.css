@@ -1,0 +1,6 @@
+.textfield-icon {
+	opacity: 0.5;
+	padding-right: 16px;
+	transform-origin: left bottom !important;
+	transform: scale(1.4);
+}

@@ -1,29 +1,30 @@
 <script lang="ts" context="module">
-	import directus from '$lib/directus';
-	import {} from '$app/navigation';
-	export async function load({ url }) {
-		console.log('load');
-		const token = directus.auth.token;
-		if (!token && url.pathname !== '/login')
+	import type { Load } from '@sveltejs/kit'
+	import directus from '$lib/directus'
+
+	export const load: Load = async ({ url }) => {
+		const token = directus.auth.token
+		const loginPath = '/login'
+
+		if (!token && url.pathname !== loginPath)
 			return {
 				status: 300,
-				redirect: '/login'
-			};
+				redirect: loginPath,
+			}
 
-		console.log({ token });
-		// const res = await directus.users.me.read();
-		// console.log({ res });
-		return {};
+		return {}
 	}
 </script>
 
 <script lang="ts">
-	import 'normalize.css';
-	import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
-	import { mdiAccount } from '@mdi/js';
-	import { A } from '@smui/common/elements';
+	// import 'normalize.css'
+	import '../app.css'
 
-	import IconButton from '$lib/utils/IconButton.svelte';
+	import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar'
+	import { mdiAccount } from '@mdi/js'
+	import { A } from '@smui/common/elements'
+
+	import IconButton from '$lib/smui/IconButton.svelte'
 </script>
 
 <TopAppBar>
