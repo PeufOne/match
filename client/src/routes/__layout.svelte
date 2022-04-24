@@ -24,6 +24,7 @@
 	import { A } from '@smui/common/elements'
 
 	import IconButton from '$lib/smui/IconButton.svelte'
+	import { faUser } from '@fortawesome/free-regular-svg-icons'
 </script>
 
 <TopAppBar>
@@ -33,7 +34,7 @@
 		</Section>
 
 		<Section align="end">
-			<IconButton icon={mdiAccount} href="/account" />
+			<IconButton icon={faUser} href="/account" />
 		</Section>
 	</Row>
 </TopAppBar>
