@@ -8,3 +8,10 @@
 	transform-origin: left bottom !important;
 	transform: scale(1.4);
 }
+
+main {
+	overflow-x: hidden;
+}
+pre {
+	overflow-x: auto;
+}

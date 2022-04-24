@@ -2,13 +2,13 @@
 	import type { Load } from '@sveltejs/kit'
 	import directus from '$lib/directus'
 
-	export const load: Load = async ({ url }) => {
+	export const load: Load = ({ url }) => {
 		const token = directus.auth.token
 		const loginPath = '/login'
 
 		if (!token && url.pathname !== loginPath)
 			return {
-				status: 300,
+				status: 303,
 				redirect: loginPath,
 			}
 
@@ -20,17 +20,16 @@
 	import '../app.css'
 
 	import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar'
-	import { mdiAccount } from '@mdi/js'
 	import { A } from '@smui/common/elements'
+	import { faUser } from '@fortawesome/free-regular-svg-icons'
 
 	import IconButton from '$lib/smui/IconButton.svelte'
-	import { faUser } from '@fortawesome/free-regular-svg-icons'
 </script>
 
 <TopAppBar>
 	<Row>
 		<Section>
-			<Title component={A} href="/">Match</Title>
+			<Title component={A} href="/" style="color: inherit; text-decoration: none;">Match</Title>
 		</Section>
 
 		<Section align="end">
@@ -39,27 +38,6 @@
 	</Row>
 </TopAppBar>
 
-<main class="mdc-top-app-bar--fixed-adjust">
+<main class="h-screen mdc-top-app-bar--fixed-adjust">
 	<slot />
 </main>
-
-<style global>
-	body {
-		font-family: roboto, Helvetica, Geneva, Tahoma, sans-serif;
-	}
-
-	a,
-	a:hover,
-	a:visited,
-	a:active {
-		color: inherit;
-		text-decoration: none;
-	}
-
-	main {
-		overflow-x: hidden;
-	}
-	pre {
-		overflow-x: auto;
-	}
-</style>
