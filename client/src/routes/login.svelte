@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition'
+	import { onMount } from 'svelte'
+	import { slide, fly } from 'svelte/transition'
 	import { goto } from '$app/navigation'
 	import Paper, { Title, Content } from '@smui/paper'
 	import TextField from '@smui/textfield'
@@ -21,6 +22,9 @@
 	let error = ''
 	let snackbar: SnackbarComponentDev
 	let isLoading = false
+	let isInit = false
+
+	onMount(() => (isInit = true))
 
 	async function handleLogin() {
 		try {
@@ -50,49 +54,59 @@
 	<div class="w-full h-full grid place-content-center">
 		<CircularProgress class="w-16 h-16" indeterminate />
 	</div>
-{:else}
-	<Paper class="m-3">
-		<Title>{register ? 'Nouveau compte' : 'Connexion'}</Title>
-		<Content>
-			{#if register}
+{:else if isInit}
+	<div in:fly|local={{ x: 0, y: 40 }}>
+		<Paper class="m-3">
+			<Title>
+				{#if register}
+					<div in:fly|local={{ x: 20 }}>Nouveau compte</div>
+				{:else}
+					<div in:fly|local={{ x: 20 }}>Connexion</div>
+				{/if}
+			</Title>
+			<Content>
+				{#if register}
+					<div transition:slide|local>
+						<TextField
+							class="w-full transition-opacity"
+							label="Nom d'utilisateur"
+							bind:value={first_name}
+							on:keyup={handleKeyup}
+						>
+							<Fa icon={faUser} class="textfield-icon" slot="leadingIcon" />
+						</TextField>
+					</div>
+				{/if}
+
 				<TextField
-					class="w-full transition-opacity"
-					label="Nom d'utilisateur"
-					bind:value={first_name}
+					class="w-full"
+					type="email"
+					label="Email"
+					input$autocomplete="email"
+					bind:value={email}
 					on:keyup={handleKeyup}
 				>
-					<Fa icon={faUser} class="textfield-icon" slot="leadingIcon" />
+					<Fa icon={faEnvelope} class="textfield-icon" slot="leadingIcon" />
 				</TextField>
-			{/if}
+				<TextField
+					class="w-full"
+					type="password"
+					input$autocomplete="password"
+					label="Mot de passe"
+					bind:value={password}
+					on:keyup={handleKeyup}
+				>
+					<Icon class="material-symbols-outlined" slot="leadingIcon">vpn_key</Icon>
+				</TextField>
 
-			<TextField
-				class="w-full"
-				type="email"
-				label="Email"
-				input$autocomplete="email"
-				bind:value={email}
-				on:keyup={handleKeyup}
-			>
-				<Fa icon={faEnvelope} class="textfield-icon" slot="leadingIcon" />
-			</TextField>
-			<TextField
-				class="w-full"
-				type="password"
-				input$autocomplete="password"
-				label="Mot de passe"
-				bind:value={password}
-				on:keyup={handleKeyup}
-			>
-				<Icon class="material-symbols-outlined" slot="leadingIcon">vpn_key</Icon>
-			</TextField>
-
-			<div class="flex pt-6">
-				<Button color="secondary" on:click={() => (register = !register)}>
-					{register ? 'Connexion' : 'Inscription'}
-				</Button>
-				<div class="flex-grow" />
-				<Button variant="raised" on:click={handleLogin}>Valider</Button>
-			</div>
-		</Content>
-	</Paper>
+				<div class="flex pt-6">
+					<Button color="secondary" on:click={() => (register = !register)}>
+						{register ? 'Connexion' : 'Inscription'}
+					</Button>
+					<div class="flex-grow" />
+					<Button variant="raised" on:click={handleLogin}>Valider</Button>
+				</div>
+			</Content>
+		</Paper>
+	</div>
 {/if}
