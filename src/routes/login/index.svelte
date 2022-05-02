@@ -14,14 +14,15 @@
 
 	import directus from '$lib/directus'
 
-	let first_name = ''
 	let email = ''
 	let password = ''
+	let first_name = ''
+
+	let error = ''
+	let isLoading = false
 
 	let register = false
-	let error = ''
 	let snackbar: SnackbarComponentDev
-	let isLoading = false
 	let isInit = false
 
 	onMount(() => (isInit = true))
@@ -29,8 +30,10 @@
 	async function handleLogin() {
 		try {
 			isLoading = true
-			if (register) await directus.users.createOne({ first_name, email, password })
-			await directus.auth.login({ email, password })
+			if (register) await directus.users.createOne({ email, password, first_name })
+			const res = await directus.auth.login({ email, password })
+			console.log({ res })
+
 			await goto('/')
 		} catch (e: any) {
 			error = e.message
@@ -39,10 +42,6 @@
 		} finally {
 			isLoading = false
 		}
-	}
-
-	function handleKeyup(event: any) {
-		if (event.key === 'Enter') handleLogin()
 	}
 </script>
 
@@ -65,47 +64,47 @@
 				{/if}
 			</Title>
 			<Content>
-				{#if register}
-					<div transition:slide|local>
+				<form on:submit|preventDefault={handleLogin} rel="asd djsasdaj sasdkj">
+					<div>
+						{#if register}
+							<div transition:slide|local>
+								<TextField
+									bind:value={first_name}
+									class="w-full transition-opacity"
+									label="Nom d'utilisateur"
+								>
+									<Fa icon={faUser} class="textfield-icon" slot="leadingIcon" />
+								</TextField>
+							</div>
+						{/if}
 						<TextField
-							class="w-full transition-opacity"
-							label="Nom d'utilisateur"
-							bind:value={first_name}
-							on:keyup={handleKeyup}
+							bind:value={email}
+							class="w-full"
+							type="email"
+							label="Email"
+							input$autocomplete="email"
 						>
-							<Fa icon={faUser} class="textfield-icon" slot="leadingIcon" />
+							<Fa icon={faEnvelope} class="textfield-icon" slot="leadingIcon" />
 						</TextField>
+						<TextField
+							bind:value={password}
+							class="w-full"
+							type="password"
+							input$autocomplete="password"
+							label="Mot de passe"
+						>
+							<Icon class="material-symbols-outlined" slot="leadingIcon">vpn_key</Icon>
+						</TextField>
+
+						<div class="flex pt-6">
+							<Button type="button" color="secondary" on:click={() => (register = !register)}>
+								{register ? 'Connexion' : 'Inscription'}
+							</Button>
+							<div class="flex-grow" />
+							<Button type="submit" variant="raised">Valider</Button>
+						</div>
 					</div>
-				{/if}
-
-				<TextField
-					class="w-full"
-					type="email"
-					label="Email"
-					input$autocomplete="email"
-					bind:value={email}
-					on:keyup={handleKeyup}
-				>
-					<Fa icon={faEnvelope} class="textfield-icon" slot="leadingIcon" />
-				</TextField>
-				<TextField
-					class="w-full"
-					type="password"
-					input$autocomplete="password"
-					label="Mot de passe"
-					bind:value={password}
-					on:keyup={handleKeyup}
-				>
-					<Icon class="material-symbols-outlined" slot="leadingIcon">vpn_key</Icon>
-				</TextField>
-
-				<div class="flex pt-6">
-					<Button color="secondary" on:click={() => (register = !register)}>
-						{register ? 'Connexion' : 'Inscription'}
-					</Button>
-					<div class="flex-grow" />
-					<Button variant="raised" on:click={handleLogin}>Valider</Button>
-				</div>
+				</form>
 			</Content>
 		</Paper>
 	</div>

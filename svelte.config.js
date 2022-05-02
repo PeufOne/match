@@ -13,6 +13,15 @@ const config = {
 			ssr: {
 				noExternal: [/^@smui(?:-extra)?\//],
 			},
+			server: {
+				proxy: {
+					'/directus': {
+						target: 'http://localhost:8055',
+						changeOrigin: true,
+						rewrite: (path) => path.replace(/^\/directus/, ''),
+					},
+				},
+			},
 		},
 	},
 }
