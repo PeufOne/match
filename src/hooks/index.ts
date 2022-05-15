@@ -1,8 +1,9 @@
 import { sequence } from '@sveltejs/kit/hooks'
-import type { Handle } from '@sveltejs/kit'
+import type { GetSession, Handle } from '@sveltejs/kit'
+import cookie from 'cookie'
 
-export const ensureAuthorization: Handle = async ({ event, resolve }) => {
-	const headers = event.request.headers
+const ensureDirectusAuthorization: Handle = async ({ event, resolve }) => {
+	const { headers } = event.request
 	const auth = headers.get('authorization')
 	if (auth) return await resolve(event)
 
@@ -16,4 +17,20 @@ export const ensureAuthorization: Handle = async ({ event, resolve }) => {
 	return await resolve(event)
 }
 
-export const handle = sequence(ensureAuthorization)
+const setLocalsFromCookies: Handle = async ({ event, resolve }) => {
+	const { headers } = event.request
+	event.locals.cookies = cookie.parse(headers.get('cookie') || '')
+	/*
+	const cookie = cookies.find((c) => c.startsWith('auth_token='))
+	if (!cookie) return await resolve(event)
+	*/
+	return await resolve(event)
+}
+
+export const handle = sequence(setLocalsFromCookies)
+
+export const getSession: GetSession = async (event) => {
+	return {
+		directus: event.locals.cookies,
+	}
+}

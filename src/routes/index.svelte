@@ -3,8 +3,8 @@
 	import { getDirectus } from '$lib/directus'
 	import type { ITeam } from 'types'
 
-	export const load: Load = async ({ fetch }) => {
-		const directus = await getDirectus(fetch)
+	export const load: Load = async ({ session }) => {
+		const directus = getDirectus(session)
 		const res = await directus
 			.items('team')
 			.readByQuery({ meta: 'total_count', fields: ['name', '*.*'] })

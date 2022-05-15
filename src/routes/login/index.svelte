@@ -11,17 +11,20 @@
 	import CircularProgress from '@smui/circular-progress'
 	import Fa from 'svelte-fa'
 	import { faEnvelope, faUser } from '@fortawesome/free-regular-svg-icons'
+	import { session } from '$app/stores'
 
-	import directus from '$lib/directus'
+	import { getDirectus } from '$lib/directus'
 
-	let email = ''
-	let password = ''
-	let first_name = ''
+	let user = {
+		email: '',
+		password: '',
+		first_name: '',
+	}
+	let register = false
 
-	let error = ''
+	let errorMessage = ''
 	let isLoading = false
 
-	let register = false
 	let snackbar: SnackbarComponentDev
 	let isInit = false
 
@@ -30,15 +33,14 @@
 	async function handleLogin() {
 		try {
 			isLoading = true
-			if (register) await directus.users.createOne({ email, password, first_name })
-			const res = await directus.auth.login({ email, password })
-			console.log({ res })
+			const directus = getDirectus($session)
+			if (register) await directus.users.createOne(user)
+			await directus.auth.login(user)
 
 			await goto('/')
-		} catch (e: any) {
-			error = e.message
+		} catch (error: any) {
+			errorMessage = error.message
 			snackbar.open()
-			console.error(e)
 		} finally {
 			isLoading = false
 		}
@@ -46,7 +48,7 @@
 </script>
 
 <Snackbar bind:this={snackbar}>
-	<Label>{error}</Label>
+	<Label>{errorMessage}</Label>
 </Snackbar>
 
 {#if isLoading}
@@ -69,7 +71,7 @@
 						{#if register}
 							<div transition:slide|local>
 								<TextField
-									bind:value={first_name}
+									bind:value={user.first_name}
 									class="w-full transition-opacity"
 									label="Nom d'utilisateur"
 								>
@@ -78,7 +80,7 @@
 							</div>
 						{/if}
 						<TextField
-							bind:value={email}
+							bind:value={user.email}
 							class="w-full"
 							type="email"
 							label="Email"
@@ -87,7 +89,7 @@
 							<Fa icon={faEnvelope} class="textfield-icon" slot="leadingIcon" />
 						</TextField>
 						<TextField
-							bind:value={password}
+							bind:value={user.password}
 							class="w-full"
 							type="password"
 							input$autocomplete="password"

@@ -1,9 +1,13 @@
 import { BaseStorage } from '@directus/sdk'
 import Cookies from 'js-cookie'
+import { browser } from '$app/env'
 
-export class CookieStorage extends BaseStorage {
+export class KitStorage extends BaseStorage {
+	constructor(private session: App.Session) {
+		super()
+	}
 	get(key: string) {
-		const value = Cookies.get(key)
+		const value = browser ? Cookies.get(key) : this.session.directus[key]
 		return value || null
 	}
 	set(key: string, value: string) {

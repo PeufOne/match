@@ -1,46 +1,33 @@
 import type { RequestHandler } from '@sveltejs/kit'
-import directus from '$lib/directus'
+import cookie from 'cookie'
 
-export const post: RequestHandler = async ({ request }) => {
-	const { register, ...user } = await request.json()
+import { getDirectus } from '$lib/directus'
 
-	console.log('VA TE FAIRE FOUTRE !!!!!!')
-
-	return {
-		status: 201,
-		body: { errors: [{ message: 'Va te faire foutre' }] },
-	}
-
+// Peut très bien être déplacé coté client pour évité les set-cookie.
+export const post: RequestHandler = async (event) => {
 	try {
+		/*
+		const directus = getDirectus(event.locals)
+		console.log('BEFORE')
+		const { request } = event
+		const { register, ...user } = await request.json()
 		const res = register
 			? await directus.users.createOne(user).then(() => directus.auth.login(user))
 			: await directus.auth.login(user)
-
-		console.log('YOLO SUCCESS', res)
+		console.log('AFTER')
+		/*
+		Object.entries(res).forEach(([key, value]) => {
+			event.request.headers.append('set-cookie', cookie.serialize(key, String(value)))
+		})
+		*/
 		return {
 			status: 201,
+			body: { todo: 'please' },
 		}
 	} catch (error: any) {
-		console.log('YOLO ERROR', error.message)
 		return {
-			status: 400,
-			body: { message: error.message },
+			status: 403,
+			body: error,
 		}
 	}
 }
-
-/*
-	async function handleLogin() {
-		try {
-			isLoading = true
-			
-			await goto('/')
-		} catch (e: any) {
-			error = e.message
-			snackbar.open()
-			console.error(e)
-		} finally {
-			isLoading = false
-		}
-	}
-	*/

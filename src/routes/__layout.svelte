@@ -1,16 +1,15 @@
 <script lang="ts" context="module">
 	import type { Load } from '@sveltejs/kit'
-	import { browser } from '$app/env'
 
-	import directus, { getDirectus } from '$lib/directus'
+	import { getDirectus } from '$lib/directus'
 
-	export const load: Load = async ({ url, fetch }) => {
-		const res = await fetch('/')
+	export const load: Load = async ({ url, fetch, session }) => {
+		console.log('load layout', session)
 
-		const directus = await getDirectus(fetch)
+		const directus = getDirectus(session)
+
 		const token = directus.auth.token
 
-		console.log({ token })
 		const loginPath = '/login'
 
 		if (!token && url.pathname !== loginPath)
