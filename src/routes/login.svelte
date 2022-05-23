@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation'
 	import Paper, { Title, Content } from '@smui/paper'
 	import TextField from '@smui/textfield'
+	import type { InputComponentDev } from '@smui/textfield'
 	import Icon from '@smui/textfield/icon'
 	import Button from '@smui/button'
 	import type { SnackbarComponentDev } from '@smui/snackbar'
@@ -21,6 +22,7 @@
 		first_name: '',
 	}
 	let register = false
+	let passwordEl: InputComponentDev
 
 	let errorMessage = ''
 	let isLoading = false
@@ -33,16 +35,20 @@
 	async function handleLogin() {
 		try {
 			isLoading = true
-			const directus = getDirectus($session)
+			const directus = getDirectus()
 			if (register) await directus.users.createOne(user)
 			await directus.auth.login(user)
-
 			await goto('/')
 		} catch (error: any) {
+			isLoading = false
 			errorMessage = error.message
 			snackbar.open()
-		} finally {
-			isLoading = false
+
+			setTimeout(() => {
+				const passwordInput = passwordEl.getElement()
+				passwordInput.focus()
+				passwordInput.select()
+			}, 0)
 		}
 	}
 </script>
@@ -67,44 +73,43 @@
 			</Title>
 			<Content>
 				<form on:submit|preventDefault={handleLogin} rel="asd djsasdaj sasdkj">
-					<div>
-						{#if register}
-							<div transition:slide|local>
-								<TextField
-									bind:value={user.first_name}
-									class="w-full transition-opacity"
-									label="Nom d'utilisateur"
-								>
-									<Fa icon={faUser} class="textfield-icon" slot="leadingIcon" />
-								</TextField>
-							</div>
-						{/if}
-						<TextField
-							bind:value={user.email}
-							class="w-full"
-							type="email"
-							label="Email"
-							input$autocomplete="email"
-						>
-							<Fa icon={faEnvelope} class="textfield-icon" slot="leadingIcon" />
-						</TextField>
-						<TextField
-							bind:value={user.password}
-							class="w-full"
-							type="password"
-							input$autocomplete="password"
-							label="Mot de passe"
-						>
-							<Icon class="material-symbols-outlined" slot="leadingIcon">vpn_key</Icon>
-						</TextField>
-
-						<div class="flex pt-6">
-							<Button type="button" color="secondary" on:click={() => (register = !register)}>
-								{register ? 'Connexion' : 'Inscription'}
-							</Button>
-							<div class="flex-grow" />
-							<Button type="submit" variant="raised">Valider</Button>
+					{#if register}
+						<div transition:slide|local>
+							<TextField
+								bind:value={user.first_name}
+								class="w-full transition-opacity"
+								label="Nom d'utilisateur"
+							>
+								<Fa icon={faUser} class="textfield-icon" slot="leadingIcon" />
+							</TextField>
 						</div>
+					{/if}
+					<TextField
+						bind:value={user.email}
+						class="w-full"
+						type="email"
+						label="Email"
+						input$autocomplete="email"
+					>
+						<Fa icon={faEnvelope} class="textfield-icon" slot="leadingIcon" />
+					</TextField>
+					<TextField
+						bind:value={user.password}
+						bind:input={passwordEl}
+						class="w-full"
+						type="password"
+						input$autocomplete="password"
+						label="Mot de passe"
+					>
+						<Icon class="material-symbols-outlined" slot="leadingIcon">vpn_key</Icon>
+					</TextField>
+
+					<div class="flex pt-6">
+						<Button type="button" color="secondary" on:click={() => (register = !register)}>
+							{register ? 'Connexion' : 'Inscription'}
+						</Button>
+						<div class="flex-grow" />
+						<Button type="submit" variant="raised">Valider</Button>
 					</div>
 				</form>
 			</Content>

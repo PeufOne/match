@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { session } from '$app/stores'
 	import Button from '@smui/button'
 
 	import { getDirectus } from '$lib/directus'
 
 	async function logout() {
-		const directus = getDirectus($session)
+		const directus = getDirectus()
 		await directus.auth.logout()
 		goto('/login')
 	}

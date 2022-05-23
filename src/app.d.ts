@@ -9,12 +9,10 @@ interface AuthResult {
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare namespace App {
-	interface Locals {
-		cookies: Record<string, string>
-	}
+	// interface Locals {}
 	// interface Platform {}
 	interface Session {
-		directus: Record<string, string>
+		cookies: Record<string, string>
 	}
 	// interface Stuff {}
 }

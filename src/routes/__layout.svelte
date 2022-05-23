@@ -3,9 +3,7 @@
 
 	import { getDirectus } from '$lib/directus'
 
-	export const load: Load = async ({ url, fetch, session }) => {
-		console.log('load layout', session)
-
+	export const load: Load = async ({ url, session }) => {
 		const directus = getDirectus(session)
 
 		const token = directus.auth.token
