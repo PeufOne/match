@@ -1,26 +1,35 @@
-import { BaseStorage } from '@directus/sdk'
-import Cookies from 'js-cookie'
 import { browser } from '$app/env'
+import { BaseStorage } from '@directus/sdk'
+import debounce from 'debounce'
+
+type AuthKey = 'access_token' | 'refresh_token' | 'expires'
 
 export class KitStorage extends BaseStorage {
-	constructor(private session?: App.Session) {
+	constructor(private session: App.Session = { directus: {} }) {
 		super()
 	}
-	get(key: string) {
-		if (!browser && !this.session)
-			console.warn(
-				'The session must be provided when the request can be executed on the server side'
-			)
-		const value = browser ? Cookies.get(key) : this.session!.cookies[key]
-		return value || null
+	get(key: AuthKey) {
+		return this.session.directus[key] || null
 	}
-	set(key: string, value: string) {
-		console.log('set value', { [key]: value })
-		Cookies.set(key, value)
+	set(key: AuthKey, value: string) {
+		this.session.directus[key] = value
+		this.setSession()
 		return value
 	}
-	delete(key: string) {
-		Cookies.remove(key)
+	delete(key: AuthKey) {
+		if (this.session.directus[key]) {
+			delete this.session.directus[key]
+			this.setSession()
+		}
+		console.log('storage delete:', key)
 		return null
 	}
+
+	setSession = debounce(async () => {
+		const url = browser ? '/session' : 'http://localhost:3000/session'
+		fetch(url, {
+			method: 'put',
+			body: JSON.stringify(this.session),
+		})
+	}, 50)
 }

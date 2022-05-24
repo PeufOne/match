@@ -7,6 +7,7 @@
 		const directus = getDirectus(session)
 
 		const token = directus.auth.token
+		console.log({ token, session })
 
 		const loginPath = '/login'
 
@@ -28,6 +29,7 @@
 	import { faUser } from '@fortawesome/free-regular-svg-icons'
 
 	import IconButton from '$lib/smui/IconButton.svelte'
+	import { session } from '$app/stores'
 </script>
 
 <TopAppBar>
@@ -44,4 +46,5 @@
 
 <main class="h-screen mdc-top-app-bar--fixed-adjust">
 	<slot />
+	<pre>{JSON.stringify($session, null, 2)}</pre>
 </main>

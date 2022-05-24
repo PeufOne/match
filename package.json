@@ -21,6 +21,7 @@
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
 		"@types/cookie": "^0.5.1",
+		"@types/debounce": "^1.2.1",
 		"@types/js-cookie": "^3.0.2",
 		"@types/uuid": "^8.3.4",
 		"@typescript-eslint/eslint-plugin": "^5.10.1",
@@ -50,9 +51,10 @@
 		"@fortawesome/free-solid-svg-icons": "^6.1.1",
 		"@mdi/js": "^6.6.96",
 		"cookie": "^0.5.0",
-		"directus": "^9.9.1",
-		"js-cookie": "^3.0.1",
+		"debounce": "^1.2.1",
+		"directus": "^9.11.0",
+		"dotenv": "^16.0.1",
 		"sqlite": "^4.1.1",
-		"uuid": "^8.3.2"
+		"svelte-kit-cookie-session": "^2.1.4"
 	}
 }

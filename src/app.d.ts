@@ -1,18 +1,21 @@
 /// <reference types="@sveltejs/kit" />
 
-interface AuthResult {
-	access_token: string
-	expires: number
-	refresh_token?: string
+interface SessionData {
+	directus: {
+		access_token?: string
+		expires?: string
+		refresh_token?: string
+	}
 }
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare namespace App {
-	// interface Locals {}
-	// interface Platform {}
-	interface Session {
+	interface Locals {
+		session: import('svelte-kit-cookie-session').Session<SessionData>
 		cookies: Record<string, string>
 	}
+	// interface Platform {}
+	interface Session extends SessionData {}
 	// interface Stuff {}
 }

@@ -35,7 +35,7 @@
 	async function handleLogin() {
 		try {
 			isLoading = true
-			const directus = getDirectus()
+			const directus = getDirectus($session)
 			if (register) await directus.users.createOne(user)
 			await directus.auth.login(user)
 			await goto('/')
