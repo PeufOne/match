@@ -39,5 +39,4 @@
 
 <main class="h-screen mdc-top-app-bar--fixed-adjust">
 	<slot />
-	<pre>{JSON.stringify($session, null, 2)}</pre>
 </main>
