@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	import type { Load } from '@sveltejs/kit'
 	import { getDirectus } from '$lib/directus'
-	import type { ITeam } from 'types'
+	import type { TTeam } from 'types'
 
 	export const load: Load = async ({ session }) => {
 		const directus = getDirectus(session)
@@ -18,7 +18,7 @@
 </script>
 
 <script lang="ts">
-	export let teams: ITeam[]
+	export let teams: TTeam[]
 </script>
 
 <h3>Mon super index</h3>
