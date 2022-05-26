@@ -2,7 +2,6 @@ import type { RequestHandler } from '@sveltejs/kit'
 
 export const put: RequestHandler = async ({ request, locals }) => {
 	const sessionData = await request.json()
-	console.log('put session', sessionData, locals.session.data)
 	locals.session.data = { ...locals.session.data, ...sessionData }
 	return {
 		body: sessionData,

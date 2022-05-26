@@ -21,7 +21,6 @@ export class KitStorage extends BaseStorage {
 			delete this.session.directus[key]
 			this.setSession()
 		}
-		console.log('storage delete:', key)
 		return null
 	}
 

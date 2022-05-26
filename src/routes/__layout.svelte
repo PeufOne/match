@@ -1,22 +1,15 @@
 <script lang="ts" context="module">
 	import type { Load } from '@sveltejs/kit'
-
 	import { getDirectus } from '$lib/directus'
 
 	export const load: Load = async ({ url, session }) => {
 		const directus = getDirectus(session)
-
-		const token = directus.auth.token
-		console.log({ token, session })
-
 		const loginPath = '/login'
-
-		if (!token && url.pathname !== loginPath)
+		if (!directus.auth.token && url.pathname !== loginPath)
 			return {
 				status: 303,
 				redirect: loginPath,
 			}
-
 		return {}
 	}
 </script>
