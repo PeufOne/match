@@ -21,8 +21,6 @@
 	export let teams: TTeam[]
 </script>
 
-<h3>Mon super index</h3>
-
 <ul>
 	{#each teams as team}
 		<li>

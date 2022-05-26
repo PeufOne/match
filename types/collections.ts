@@ -1,6 +1,6 @@
 import type { TEvent } from './event'
 import type { TTeam } from './team'
-import type { TUser } from './user'
+import type { TUser, TUserCustom } from './user'
 
 type TBaseItem = {
 	id: number
@@ -11,7 +11,7 @@ type TBaseItem = {
 }
 
 export type TCollections = {
-	directus_users: TUser
+	directus_users: TUserCustom
 	team: TTeam & TBaseItem
 	event: TEvent & TBaseItem
 }
