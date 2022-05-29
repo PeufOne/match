@@ -1,30 +1,18 @@
 <script lang="ts" context="module">
 	import type { Load } from '@sveltejs/kit'
-	import { getDirectus } from '$lib/directus'
-	import type { TTeam } from 'types'
-
-	export const load: Load = async ({ session }) => {
-		const directus = getDirectus(session)
-		const res = await directus
-			.items('team')
-			.readByQuery({ meta: 'total_count', fields: ['name', '*.*'] })
+	export const load: Load = async (event) => {
 		return {
-			status: 200,
-			props: {
-				teams: res.data,
-			},
+			status: 303,
+			redirect: '/event',
 		}
 	}
 </script>
 
 <script lang="ts">
-	export let teams: TTeam[]
+	import Button from '@smui/button'
 </script>
 
-<ul>
-	{#each teams as team}
-		<li>
-			{team.name}
-		</li>
-	{/each}
-</ul>
+<div class="m-3">
+	<h2>Hello</h2>
+	<Button href="/event">évenements</Button>
+</div>

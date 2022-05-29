@@ -7,6 +7,6 @@ export function getDirectus(session?: App.Session) {
 	const url = browser ? '/directus' : 'http://localhost:8055'
 	return new Directus<TCollections>(url, {
 		storage: new KitStorage(session),
-		auth: { mode: 'json' },
+		auth: { mode: 'json', msRefreshBeforeExpires: 30_000 },
 	})
 }

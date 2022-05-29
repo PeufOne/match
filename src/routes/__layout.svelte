@@ -34,7 +34,7 @@
 	import '../app.css'
 	import type { TUser } from 'types'
 	import IconButton from '$lib/smui/IconButton.svelte'
-	import { selectTheme } from '$lib/utils/theme'
+	import { selectTheme } from '$lib/store/theme'
 
 	export let user: TUser | null
 

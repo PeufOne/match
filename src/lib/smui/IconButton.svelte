@@ -1,10 +1,12 @@
 <script lang="ts">
 	import IconButton, { Icon } from '@smui/icon-button'
+	import Fab from '@smui/fab'
 	import { Svg } from '@smui/common/elements'
 	import type { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 
 	export let icon: string | IconDefinition
 
+	export let fab = false
 	export let ripple = true
 	export let color: 'primary' | 'secondary' | undefined = undefined
 	export let toggle = false
@@ -22,8 +24,16 @@
 	$: viewBox = typeof icon === 'string' ? '0 0 24 24' : `0 0 ${icon.icon[0]} ${icon.icon[1]}`
 </script>
 
-<IconButton {ripple} {color} {toggle} {displayFlex} {size} {href} {...$$restProps}>
-	<Icon component={Svg} {viewBox}>
-		<path fill="currentColor" {d} />
-	</Icon>
-</IconButton>
+{#if fab}
+	<Fab {ripple} {color} {toggle} {href} {...$$restProps}>
+		<Icon component={Svg} {viewBox}>
+			<path fill="currentColor" {d} />
+		</Icon>
+	</Fab>
+{:else}
+	<IconButton {ripple} {color} {toggle} {displayFlex} {size} {href} {...$$restProps}>
+		<Icon component={Svg} {viewBox}>
+			<path fill="currentColor" {d} />
+		</Icon>
+	</IconButton>
+{/if}

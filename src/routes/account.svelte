@@ -22,7 +22,7 @@
 	import { Label } from '@smui/common'
 
 	import type { TUser, TTheme } from 'types'
-	import { selectTheme } from '$lib/utils/theme'
+	import { selectTheme } from '$lib/store/theme'
 
 	export let user: TUser
 

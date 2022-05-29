@@ -72,7 +72,7 @@
 				{/if}
 			</Title>
 			<Content>
-				<form on:submit|preventDefault={handleLogin} rel="asd djsasdaj sasdkj">
+				<form on:submit|preventDefault={handleLogin}>
 					{#if register}
 						<div transition:slide|local>
 							<TextField
